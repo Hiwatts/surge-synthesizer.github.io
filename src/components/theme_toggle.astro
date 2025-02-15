@@ -1,0 +1,36 @@
+<div>
+    <select aria-label="Theme" name="themes" id="theme-select" class="bg-black text-surgeOrange rounded-sm p-1">
+        <option value="auto">System</option>
+        <option value="dark">Dark</option>
+        <option value="light">Light</option>
+    </select>
+</div>
+
+<script>
+    function themeObserver() {
+        const themeSelect = document.getElementById("theme-select") as HTMLSelectElement;
+
+        themeSelect.addEventListener("change", () => {
+            localStorage.setItem("theme", themeSelect.value);
+
+            switch (themeSelect.value) {
+                case "auto":
+                    window.matchMedia("(prefers-color-scheme: dark)").matches
+                        ? document.documentElement.setAttribute("data-theme", "dark")
+                        : document.documentElement.setAttribute("data-theme", "light");
+                    break;
+
+                case "dark":
+                    document.documentElement.setAttribute("data-theme", "dark");
+                    break;
+
+                case "light":
+                    document.documentElement.setAttribute("data-theme", "light");
+                    break;
+            }
+        });
+    }
+
+    document.addEventListener("astro:after-swap", themeObserver);
+    themeObserver();
+</script>

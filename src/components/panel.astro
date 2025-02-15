@@ -1,0 +1,7 @@
+---
+const { style } = Astro.props;
+---
+
+<div class:list={["grid", "md:grid-cols-2", "grid-cols-1", style]}>
+    <slot />
+</div>

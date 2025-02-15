@@ -1,0 +1,50 @@
+<a id="download_link" href="/downloads" class="download-button">Download</a>
+
+<script>
+    import stable_xt_macos_url from "../assets/includes/stable_xt_macos_url?raw";
+    import stable_xt_win_x64_url from "../assets/includes/stable_xt_win_x64_url?raw";
+
+    const downloadLink = document.getElementById("download_link") as HTMLAnchorElement;
+
+    let userAgent = window.navigator.userAgent;
+    let platform = window.navigator.platform;
+
+    let platforms = {
+        mac: ["Macintosh", "MacIntel", "MacPPC", "Mac68K"],
+        windows: ["Win32", "Win64", "Windows", "WinCE"],
+        ios: ["iPhone", "iPad", "iPod"],
+        bsd: ["FreeBSD", "FreeBSD amd64"],
+    };
+
+    let os = null;
+
+    if (platforms.mac.indexOf(platform) !== -1) {
+        downloadLink.innerText = "Download for macOS";
+        downloadLink.href = stable_xt_macos_url;
+        os = "mac";
+    } else if (platforms.windows.indexOf(platform) !== -1) {
+        downloadLink.innerText = "Download for Windows";
+        downloadLink.href = stable_xt_win_x64_url;
+        os = "windows";
+    } else if (platforms.bsd.indexOf(platform) !== -1) {
+        downloadLink.innerText = "Download for FreeBSD";
+        downloadLink.href =
+            "https://github.com/surge-synthesizer/surge/blob/main/doc/Linux-and-other-Unix-like-distributions.md#surge-on-freebsd";
+        os = "bsd";
+    } else if (platforms.ios.indexOf(platform) !== -1) {
+        downloadLink.innerText = "Download";
+        downloadLink.href = "/downloads";
+        os = "ios";
+    } else if (/Android/.test(userAgent)) {
+        downloadLink.innerText = "Download";
+        downloadLink.href = "/downloads";
+        os = "android";
+    } else if (!os && /Linux/.test(platform)) {
+        downloadLink.innerText = "Download for Linux";
+        downloadLink.href = "https://github.com/surge-synthesizer/releases-xt/releases";
+        os = "linux";
+    } else {
+        downloadLink.innerText = "Download";
+        downloadLink.href = "/downloads";
+    }
+</script>

@@ -1,0 +1,79 @@
+---
+import { getCollection, render } from "astro:content";
+import Default from "../layouts/default.astro";
+import ChangelogToc from "../components/toc_changelog.astro";
+
+const changelogs = (await getCollection("old_changelogs"))
+    .sort((a, b) => a.data.order - b.data.order)
+    .reverse();
+
+const stableVersion = "1.9.0.0";
+
+const currentChangelog = changelogs.filter((changelog) => changelog.data.version === stableVersion);
+
+const previousChangelog = changelogs.filter(
+    (changelog) => changelog.data.version !== stableVersion,
+);
+---
+
+<Default title="Old Changelogs" toc={true}>
+    <ChangelogToc />
+    <div class="wrapper">
+        <div id="pagecontent">
+            <span class="title">Old Changelogs</span>
+            <p>
+                This page contains changelogs for all release versions of Surge, prior to Surge XT.
+            </p>
+
+            <p>
+                Changelogs for Surge XT can be found <a href="/changelog">here</a>.
+            </p>
+            {
+                currentChangelog.map((changelog) => (
+                    <>
+                        <h1
+                            class="changelog-title"
+                            id={changelog.data.version}
+                            onclick={"toggleSection(id)"}>
+                            {changelog.data.title}
+                        </h1>
+                        <div id={changelog.data.version + "-block"}>
+                            {async () => {
+                                const { Content } = await render(changelog);
+                                return <Content />;
+                            }}
+                        </div>
+                    </>
+                ))
+            }
+            {
+                previousChangelog.map((changelog) => (
+                    <>
+                        <h1
+                            class="changelog-title"
+                            id={changelog.data.version}
+                            onclick={"toggleSection(id)"}>
+                            {changelog.data.title}
+                        </h1>
+                        <div class="hidden" id={changelog.data.version + "-block"}>
+                            {async () => {
+                                const { Content } = await render(changelog);
+                                return <Content />;
+                            }}
+                        </div>
+                    </>
+                ))
+            }
+        </div>
+    </div>
+</Default>
+
+<script is:inline>
+    const toggleSection = (e) => {
+        let block = document.getElementById(`${e}-block`);
+
+        window.getComputedStyle(block).getPropertyValue("display") !== "none"
+            ? (block.style.display = "none")
+            : (block.style.display = "initial");
+    };
+</script>

@@ -1,0 +1,7 @@
+bcbffe5 : Update sst-jucegui to include cstdint (#7979)
+Sat, 15 Feb 2025 11:43:02 -0500
+Paul
+
+Update sst-jucegui to include cstdint (#7979)
+
+To fix a fedora rawhide obs error
