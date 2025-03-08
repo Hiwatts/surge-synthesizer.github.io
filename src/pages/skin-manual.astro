@@ -1,0 +1,27 @@
+---
+import { getEntry, render } from "astro:content";
+import Default from "../layouts/default.astro";
+import Toc from "../components/toc.astro";
+import * as skin_autodoc from "../assets/includes/skin_autodoc.md";
+
+const engine = await getEntry("pages", "skin-engine");
+
+if (!engine) {
+    throw new Error("Could not find entry");
+}
+
+const { Content } = await render(engine);
+
+const AutoDoc = skin_autodoc.Content;
+---
+
+<Default title={engine.data.title} toc={true}>
+    <Toc />
+    <div class="wrapper">
+        <div id="pagecontent">
+            <span class="title">{engine.data.title}</span>
+            <Content />
+            <AutoDoc />
+        </div>
+    </div>
+</Default>

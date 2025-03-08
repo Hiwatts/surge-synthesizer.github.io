@@ -1,0 +1,192 @@
+@import "tailwindcss";
+
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@font-face {
+    font-family: "Lato";
+    src: url("/fonts/Lato-Regular.woff") format("woff");
+    font-style: normal;
+    font-weight: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: "Lato";
+    src: url("/fonts/Lato-Italic.woff") format("woff");
+    font-style: italic;
+    font-weight: normal;
+    font-display: block;
+}
+
+@theme {
+    --font-sans: "Lato";
+    --color-surgeOrange: #ff9900;
+    --color-surgeOrangeBright: #ffa826;
+    --color-surgeBlue: #2d86fe;
+    --color-surgeBlueBright: #4c98fe;
+    --color-backgroundBlue: #005db6;
+}
+
+@layer base {
+    html[data-theme="dark"] {
+        scrollbar-color: var(--color-surgeOrange) var(--color-neutral-900);
+        scrollbar-width: auto;
+    }
+
+    html[data-theme="light"] {
+        scrollbar-color: var(--color-surgeOrange) var(--color-neutral-100);
+        scrollbar-width: auto;
+    }
+
+    html,
+    body {
+        height: 100%;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+        @apply mt-8 mb-4 font-bold;
+    }
+
+    h1 {
+        @apply text-3xl;
+    }
+
+    h2 {
+        @apply text-2xl;
+    }
+
+    h3 {
+        @apply text-xl;
+    }
+
+    h4 {
+        @apply text-lg;
+    }
+
+    a {
+        @apply text-surgeBlue underline decoration-dotted underline-offset-4 hover:text-surgeBlueBright dark:text-surgeOrange dark:hover:text-surgeOrangeBright;
+    }
+
+    menu {
+        @apply list-outside;
+    }
+
+    ul {
+        @apply mb-4 list-outside list-disc pl-4;
+    }
+
+    ol {
+        @apply mb-4 list-outside list-decimal pl-4;
+    }
+
+    li > ul,
+    li > ol {
+        @apply mb-4 ml-4;
+    }
+
+    li > p {
+        @apply inline;
+    }
+
+    p {
+        @apply mb-4 text-pretty;
+    }
+
+    iframe {
+        @apply mb-4;
+    }
+
+    :last-child {
+        @apply mb-0;
+    }
+
+    img {
+        @apply mb-4;
+    }
+
+    pre {
+        @apply mb-4 p-4;
+    }
+
+    table {
+        @apply mb-4 overflow-scroll border-2 border-neutral-300 dark:border-neutral-700;
+    }
+
+    th {
+        @apply bg-neutral-300 text-left align-bottom text-lg font-bold dark:bg-neutral-700;
+    }
+
+    th:empty {
+        @apply p-0;
+    }
+
+    td {
+        @apply align-top;
+    }
+
+    table td + td {
+        @apply border-l-2 border-neutral-300 dark:border-neutral-700;
+    }
+
+    th,
+    td {
+        @apply p-2;
+    }
+
+    td:first-child {
+        @apply font-black;
+    }
+
+    tr:nth-child(odd) {
+        @apply bg-neutral-100 dark:bg-neutral-900;
+    }
+
+    tr:nth-child(even) {
+        @apply bg-neutral-200 dark:bg-neutral-800;
+    }
+
+    .title {
+        @apply mb-4 block text-center text-4xl font-black tracking-wide;
+    }
+
+    .changelog-title {
+        @apply my-8 w-fit underline decoration-dotted underline-offset-4 hover:cursor-pointer;
+    }
+
+    .download-button {
+        @apply mb-4 block w-fit rounded-lg bg-surgeBlue p-4 text-center text-lg font-bold text-white no-underline duration-300 hover:bg-surgeBlue hover:px-6 hover:text-white dark:bg-surgeOrange dark:text-black dark:hover:bg-surgeOrange dark:hover:text-black;
+    }
+
+    .wrapper {
+        @apply min-h-0 w-full flex-shrink flex-grow overflow-auto;
+    }
+
+    #pagecontent {
+        @apply m-auto min-h-0 max-w-[100ch] p-8;
+    }
+
+    .toc {
+        @apply fixed top-0 hidden h-full w-fit max-w-[36ch] flex-shrink-0 overflow-auto border-r-[1px] border-neutral-300 bg-neutral-100 p-4 text-surgeBlue shadow-md shadow-neutral-400 md:[position:initial] md:[display:initial] dark:border-neutral-700 dark:bg-neutral-900 dark:text-surgeOrange dark:shadow-black print:hidden;
+    }
+
+    .toc-toggle {
+        @apply rounded p-1 text-black no-underline hover:cursor-pointer hover:bg-black hover:text-surgeOrange;
+    }
+    .category {
+        @apply block w-full rounded p-1 text-black no-underline group-hover:bg-black group-hover:text-surgeOrange hover:cursor-pointer hover:bg-black hover:text-surgeOrange;
+    }
+    .submenu {
+        @apply absolute right-0 left-0 hidden min-w-48 bg-transparent group-hover:block md:right-[unset] md:left-[unset];
+    }
+    .dropdown {
+        @apply flex flex-col rounded-lg bg-surgeOrange p-2 shadow-md;
+    }
+    .link {
+        @apply block w-full rounded p-1 text-black no-underline hover:cursor-pointer hover:bg-black hover:text-surgeOrange;
+    }
+}

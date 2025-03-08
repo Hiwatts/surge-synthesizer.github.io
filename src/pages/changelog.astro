@@ -1,0 +1,85 @@
+---
+import { getCollection, render } from "astro:content";
+import Default from "../layouts/default.astro";
+import ChangelogToc from "../components/toc_changelog.astro";
+import stable_xt_version from "../assets/includes/stable_xt_version?raw";
+
+const changelogs = (await getCollection("changelogs"))
+    .sort((a, b) => a.data.order - b.data.order)
+    .reverse();
+
+const stableVersion = stable_xt_version.trimEnd();
+
+const currentChangelog = changelogs.filter((changelog) => changelog.data.version === stableVersion);
+
+const previousChangelog = changelogs.filter(
+    (changelog) => changelog.data.version !== stableVersion,
+);
+---
+
+<Default title="Changelog" toc={true}>
+    <ChangelogToc />
+    <div class="wrapper">
+        <div id="pagecontent">
+            <span class="title">Changelog</span>
+            <p>
+                This page contains changelogs for all release versions of Surge XT. For the latest
+                developments, we are keeping a <a href="/nightlychangelog"
+                    >separate nightlies changelog, which will be merged to this page upon release</a
+                >.
+            </p>
+
+            <p>
+                Changelogs for versions prior to Surge XT 1.0 release can be found <a
+                    href="/old-changelogs">here.</a
+                >
+            </p>
+            {
+                currentChangelog.map((changelog) => (
+                    <>
+                        <h1
+                            class="changelog-title"
+                            id={changelog.data.version}
+                            onclick={"toggleSection(id)"}>
+                            {changelog.data.title}
+                        </h1>
+                        <div id={changelog.data.version + "-block"}>
+                            {async () => {
+                                const { Content } = await render(changelog);
+                                return <Content />;
+                            }}
+                        </div>
+                    </>
+                ))
+            }
+            {
+                previousChangelog.map((changelog) => (
+                    <>
+                        <h1
+                            class="changelog-title"
+                            id={changelog.data.version}
+                            onclick={"toggleSection(id)"}>
+                            {changelog.data.title}
+                        </h1>
+                        <div class="hidden" id={changelog.data.version + "-block"}>
+                            {async () => {
+                                const { Content } = await render(changelog);
+                                return <Content />;
+                            }}
+                        </div>
+                    </>
+                ))
+            }
+        </div>
+    </div>
+</Default>
+
+<script is:inline>
+    const toggleSection = (e) => {
+        let block = document.getElementById(`${e}-block`);
+
+        window.getComputedStyle(block).getPropertyValue("display") !== "none"
+            ? (block.style.display = "none")
+            : (block.style.display = "initial");
+    };
+</script>

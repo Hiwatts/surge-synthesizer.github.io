@@ -1,0 +1,115 @@
+---
+import "../styles/index.css";
+import Nav from "../components/nav.astro";
+
+const { title, toc } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="author" content="Surge Synth Team" />
+        <meta name="description" content="Surge XT is an open source hybrid synthesizer" />
+        <meta property="og:url" content={Astro.url.href} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content="Surge XT is an open source hybrid synthesizer" />
+        <meta
+            property="og:image"
+            content="https://surge-synthesizer.github.io/images/og_image.png"
+        />
+        <meta
+            property="og:image:secure_url"
+            content="https://surge-synthesizer.github.io/images/og_image.png"
+        />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="600" />
+        <meta property="ig:image:alt" content="Surge XT - Free & Open Source Hybrid Synthesizer" />
+        <meta property="og:type" content="website" />
+        <link rel="icon" href="/favicon.ico" />
+        <link
+            rel="preload"
+            href="/fonts/Lato-Regular.woff"
+            as="font"
+            type="font/woff"
+            crossorigin
+        />
+        <link rel="preload" href="/fonts/Lato-Italic.woff" as="font" type="font/woff" crossorigin />
+        <title>{title}</title>
+        <script is:inline>
+            function setTheme() {
+                !localStorage.getItem("theme") && localStorage.setItem("theme", "auto");
+
+                switch (localStorage.getItem("theme")) {
+                    case "auto":
+                        window.matchMedia("(prefers-color-scheme: dark)").matches
+                            ? document.documentElement.setAttribute("data-theme", "dark")
+                            : document.documentElement.setAttribute("data-theme", "light");
+                        break;
+
+                    case "dark":
+                        document.documentElement.setAttribute("data-theme", "dark");
+                        break;
+
+                    case "light":
+                        document.documentElement.setAttribute("data-theme", "light");
+                        break;
+                }
+            }
+
+            function setThemeSelection() {
+                document.getElementById("theme-select").value = localStorage.getItem("theme");
+            }
+
+            setTheme();
+
+            document.addEventListener("readystatechange", (event) => {
+                if (event.target.readyState === "interactive") {
+                    setThemeSelection();
+                }
+            });
+
+            document.addEventListener("astro:after-swap", () => {
+                setTheme();
+                setThemeSelection();
+            });
+        </script>
+    </head>
+
+    <body
+        class="flex flex-col overflow-hidden bg-neutral-100 text-neutral-800 dark:bg-neutral-900 dark:text-neutral-200 print:bg-white">
+        <Nav toc={toc} />
+        <slot />
+    </body>
+</html>
+
+<script>
+    function themeObserver() {
+        const themeSelect = document.getElementById("theme-select") as HTMLSelectElement;
+
+        themeSelect.addEventListener("change", () => {
+            localStorage.setItem("theme", themeSelect.value);
+
+            switch (themeSelect.value) {
+                case "auto":
+                    window.matchMedia("(prefers-color-scheme: dark)").matches
+                        ? document.documentElement.setAttribute("data-theme", "dark")
+                        : document.documentElement.setAttribute("data-theme", "light");
+                    break;
+
+                case "dark":
+                    document.documentElement.setAttribute("data-theme", "dark");
+                    break;
+
+                case "light":
+                    document.documentElement.setAttribute("data-theme", "light");
+                    break;
+            }
+        });
+    }
+
+    document.addEventListener("astro:after-swap", themeObserver);
+    themeObserver();
+</script>
